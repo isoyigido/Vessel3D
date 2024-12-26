@@ -4,15 +4,16 @@ import camera.Camera;
 import main.Constants;
 
 import java.awt.*;
-import java.util.ArrayList;
 
-public class Vertex {
+public class Point {
     public double x, y, z;
+    public int radius;
 
-    public Vertex(double x_input, double y_input, double z_input){
+    public Point(double x_input, double y_input, double z_input, int radius_input) {
         x = x_input;
         y = y_input;
         z = z_input;
+        radius = radius_input;
     }
 
     public void render(Camera camera, Graphics2D graphics2D) {
@@ -20,10 +21,10 @@ public class Vertex {
 
         if (z_relative >= 0) {
             int x_projected = camera.projectX(x, y, z_relative);
-            int y_projected = camera.projectY(y, y, z_relative);
+            int y_projected = camera.projectY(x, y, z_relative);
 
             graphics2D.setColor(Color.BLACK);
-            graphics2D.fillRect(x_projected + Constants.xOffset, Constants.yOffset - y_projected, 1, 1);
+            graphics2D.fillOval(x_projected + Constants.xOffset - radius, Constants.yOffset - y_projected - radius, radius, radius);
         }
     }
 }

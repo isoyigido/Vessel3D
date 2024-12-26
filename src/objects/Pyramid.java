@@ -26,7 +26,7 @@ public class Pyramid {
         Vertex B = new Vertex(x + size, y, z + size);
         Vertex C = new Vertex(x, y, z);
         Vertex D = new Vertex(x, y, z + size);
-        Vertex E = new Vertex(x + size/2.0f, y+size, z + size/2.0f);
+        Vertex E = new Vertex(x + size*0.5f, y+size, z + size*0.5f);
 
         vertex_table.add(A);
         vertex_table.add(B);
