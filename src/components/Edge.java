@@ -21,11 +21,10 @@ public class Edge {
     }
 
     public void render(Camera camera, Graphics2D graphics2D) {
-        double z_relative1 = camera.zRelative(vertex1.z);
-        double z_relative2 = camera.zRelative(vertex2.z);
+        double z_relative1 = camera.zRelative(vertex1.x, vertex1.y, vertex1.z);
+        double z_relative2 = camera.zRelative(vertex2.x, vertex2.y, vertex2.z);
 
-//         (z_relative1 >= 0 && z_relative2 >= 0)
-        if (true) {
+        if (z_relative1 >= 0 && z_relative2 >= 0) {
             int x_projected1 = camera.projectX(vertex1.x, vertex1.y, vertex1.z);
             int x_projected2 = camera.projectX(vertex2.x, vertex2.y, vertex2.z);
 

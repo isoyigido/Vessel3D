@@ -16,7 +16,7 @@ public class InfoGUI {
             String rotation_str = "yaw: " + camera.yaw + ", pitch: " + camera.pitch + ", roll: " + camera.roll;
             graphics2D.drawString(rotation_str, 0, fontMetrics.getHeight() + fontMetrics.getAscent());
             String focal_length_str = "Focal Length: " + camera.focal_length;
-            graphics2D.drawString(focal_length_str, 0, 2 * fontMetrics.getHeight() + fontMetrics.getAscent());
+            graphics2D.drawString(focal_length_str, 0, 2*fontMetrics.getHeight() + fontMetrics.getAscent());
         }
     }
 }

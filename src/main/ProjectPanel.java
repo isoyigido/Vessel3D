@@ -23,8 +23,9 @@ public class ProjectPanel extends JPanel {
     public static final String source_directory = "res/data";
     BufferedImage[] slices;
 
-    Point[] points;
-    RectangularPrism rectangularPrism;
+    RectangularPrism[] rectangularPrisms;
+    public static RectangularPrism rectangularPrism1;
+    public static RectangularPrism rectangularPrism2;
 
     public ProjectPanel() {
         setPanelSize();
@@ -36,14 +37,15 @@ public class ProjectPanel extends JPanel {
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
 
-        camera = new Camera(0, 0, 0, 0, 0, 0, (int) Camera.calculateFocalLength(90, Constants.screenWidth));
+        camera = new Camera(0, 0, 0, 0, 0, 0, (int) Camera.calculateFocalLength(90, Constants.screenWidth), 2, 1);
 
         Data.indexDataIn(source_directory);
         slices = Data.loadPngSlices(source_directory);
         assert slices != null;
-        points = Converter.convertToPoints(Converter.convertToInt3(slices));
+        rectangularPrisms = Converter.convertToRectangularPrisms(Converter.convertToInt3(slices));
 
-        rectangularPrism = new RectangularPrism(0, 0, 50, 50, 100, 25);
+        rectangularPrism1 = new RectangularPrism(-25, -50, 50, 50, 100, 25);
+        rectangularPrism2 = new RectangularPrism(-25, -50, -50, 50, 100, 25);
     }
 
     private void setPanelSize() {
@@ -58,10 +60,11 @@ public class ProjectPanel extends JPanel {
 
         Graphics2D graphics2D = (Graphics2D) graphics;
 
-        rectangularPrism.renderEdges(camera, graphics2D);
-//        for(Point point : points) {
-//            point.render(camera, graphics2D);
-//        }
+//        rectangularPrism1.renderEdges(camera, graphics2D);
+//        rectangularPrism2.renderEdges(camera, graphics2D);
+        for(RectangularPrism rectangularPrism : rectangularPrisms) {
+            rectangularPrism.renderEdges(camera, graphics2D);
+        }
         InfoGUI.render(camera, graphics2D);
     }
 

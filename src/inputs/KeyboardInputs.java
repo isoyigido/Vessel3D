@@ -56,12 +56,14 @@ public class KeyboardInputs implements KeyListener {
             projectPanel.camera.roll_neg = true;
         }
         if (e.getKeyCode() == KeyEvent.VK_R) {
-//            projectPanel.camera.x = 0;
-//            projectPanel.camera.y = 0;
-//            projectPanel.camera.z = 0;
             projectPanel.camera.yaw = 0;
             projectPanel.camera.pitch = 0;
             projectPanel.camera.roll = 0;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_O) {
+            projectPanel.camera.x = 0;
+            projectPanel.camera.y = 0;
+            projectPanel.camera.z = 0;
         }
         if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == 107) {
             projectPanel.camera.focal_length+=5;

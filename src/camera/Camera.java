@@ -7,9 +7,11 @@ public class Camera {
 
     public int focal_length;
 
+    public double speed, sensitivity;
+
     public boolean gui_enabled = false;
 
-    public Camera(double x_input, double y_input, double z_input, double yaw_input, double pitch_input, double roll_input, int focal_length_input) {
+    public Camera(double x_input, double y_input, double z_input, double yaw_input, double pitch_input, double roll_input, int focal_length_input, int speed_input, int sensitivity_input) {
         x = x_input;
         y = y_input;
         z = z_input;
@@ -19,6 +21,9 @@ public class Camera {
         roll = roll_input;
 
         focal_length = focal_length_input;
+
+        speed = speed_input;
+        sensitivity = sensitivity_input;
 
         {
             forward = false;
@@ -38,40 +43,40 @@ public class Camera {
 
     public void update() {
         if(forward) {
-            z+=5;
+            z+=speed;
         }
         if(backward) {
-            z-=5;
+            z-=speed;
         }
         if(right) {
-            x+=5;
+            x+=speed;
         }
         if(left) {
-            x-=5;
+            x-=speed;
         }
         if(up) {
-            y+=5;
+            y+=speed;
         }
         if(down) {
-            y-=5;
+            y-=speed;
         }
         if(yaw_pos) {
-            yaw+=5;
+            yaw+=sensitivity;
         }
         if(yaw_neg) {
-            yaw-=5;
+            yaw-=sensitivity;
         }
         if(pitch_pos) {
-            pitch+=5;
+            pitch+=sensitivity;
         }
         if(pitch_neg) {
-            pitch-=5;
+            pitch-=sensitivity;
         }
         if(roll_pos) {
-            roll+=5;
+            roll+=sensitivity;
         }
         if(roll_neg) {
-            roll-=5;
+            roll-=sensitivity;
         }
     }
 
@@ -94,31 +99,45 @@ public class Camera {
         return (int) ((yRelative * focal_length) / (focal_length + zRelative));
     }
 
-    public double zRelative(double worldZ) {
-        return worldZ - z;
+    public double zRelative(double worldX, double worldY, double worldZ) {
+        double[] localCoords = worldToLocal(worldX, worldY, worldZ);
+        return localCoords[3];
     }
 
     private double[] worldToLocal(double worldX, double worldY, double worldZ) {
-        //pitch ve yaw için düzelt
         double xRelative = worldX - x;
         double yRelative = worldY - y;
-        double zRelative = worldZ - z;
+        double zRelativeToCamera = worldZ - z;
 
         double yawRadians = Math.toRadians(yaw);
         double pitchRadians = Math.toRadians(pitch);
         double rollRadians = Math.toRadians(roll);
 
+        double radius, radian_diff, tempX, tempY, tempZ;
+
         // Rotate around Y-axis (Yaw)
-        double tempX = xRelative - Math.cos(-yawRadians) * zRelative;
-        double tempZ = xRelative * Math.sin(-yawRadians) + zRelative * Math.cos(yawRadians);
+        radius = Math.sqrt(xRelative*xRelative+zRelativeToCamera*zRelativeToCamera);
+        radian_diff = yawRadians-Math.atan(-zRelativeToCamera/xRelative);
+        if(xRelative<0) {
+            radian_diff+=Math.PI;
+        }
+        tempX = Math.cos(radian_diff) * radius;
+        tempZ = Math.sin(radian_diff) * radius;
+
         xRelative = tempX;
-        zRelative = tempZ;
+        zRelativeToCamera = tempZ;
 
         // Rotate around X-axis (Pitch)
-        double tempY = yRelative * Math.cos(pitchRadians) - zRelative * Math.sin(pitchRadians);
-        tempZ = yRelative * Math.sin(pitchRadians) + zRelative * Math.cos(pitchRadians);
+        radius = Math.sqrt(yRelative*yRelative+zRelativeToCamera*zRelativeToCamera);
+        radian_diff = pitchRadians-Math.atan(-zRelativeToCamera/yRelative);
+        if(yRelative<0) {
+            radian_diff+=Math.PI;
+        }
+        tempY = Math.cos(radian_diff) * radius;
+        tempZ = Math.sin(radian_diff) * radius;
+
         yRelative = tempY;
-        zRelative = tempZ;
+        zRelativeToCamera = tempZ;
 
         // Rotate around Z-axis (Roll)
         tempX = xRelative * Math.cos(rollRadians) - yRelative * Math.sin(rollRadians);
@@ -126,6 +145,8 @@ public class Camera {
         xRelative = tempX;
         yRelative = tempY;
 
-        return new double[]{xRelative, yRelative, zRelative};
+        double zRelative = zRelativeToCamera - focal_length;
+
+        return new double[]{xRelative, yRelative, zRelative, zRelativeToCamera};
     }
 }

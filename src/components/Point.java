@@ -17,7 +17,7 @@ public class Point {
     }
 
     public void render(Camera camera, Graphics2D graphics2D) {
-        double z_relative = camera.zRelative(z);
+        double z_relative = camera.zRelative(x, y, z);
 
         if (z_relative >= 0) {
             int x_projected = camera.projectX(x, y, z_relative);

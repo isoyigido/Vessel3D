@@ -36,7 +36,7 @@ public class Converter {
             for(int y_index = 0; y_index < int3[0].length; y_index++) {
                 for(int x_index = 0; x_index < int3[0][0].length; x_index++) {
                     if(int3[z_index][y_index][x_index] == 1) {
-                        points.add(new Point(x_index, z_index, y_index, 1));
+                        points.add(new Point(x_index, z_index*3, y_index, 1));
                     }
                 }
             }
@@ -45,19 +45,24 @@ public class Converter {
         return points.toArray(new Point[0]);
     }
 
-//    public static RectangularPrism[] convertToRectangularPrisms(int[][][] int3) {
-//        List<RectangularPrism> rectangularPrisms = new ArrayList<>();
-//
-//        for(int z_index = 0; z_index < int3.length; z_index++) {
-//            for(int y_index = 0; y_index < int3[0].length; y_index++) {
-//                for(int x_index = 0; x_index < int3[0][0].length; x_index++) {
-//                    if(int3[z_index][y_index][x_index] == 1) {
-//                        rectangularPrisms.add(new Point(x_index, y_index, z_index, 1));
-//                    }
-//                }
-//            }
-//        }
-//
-//        return rectangularPrisms.toArray(new Point[0]);
-//    }
+    public static RectangularPrism[] convertToRectangularPrisms(int[][][] int3) {
+        List<RectangularPrism> rectangularPrisms = new ArrayList<>();
+
+        int temp = 0;
+
+        for(int z_index = 0; z_index < 20; z_index++) {
+            for(int y_index = 0; y_index < int3[0].length; y_index++) {
+                for(int x_index = 0; x_index < int3[0][0].length; x_index++) {
+                    if(int3[z_index][y_index][x_index] == 1) {
+                        temp++;
+                    } else if (temp>0){
+                        rectangularPrisms.add(new RectangularPrism(x_index*1, y_index*1, z_index*1, temp*1, 1, 1));
+                        temp = 0;
+                    }
+                }
+            }
+        }
+
+        return rectangularPrisms.toArray(new RectangularPrism[0]);
+    }
 }
