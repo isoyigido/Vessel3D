@@ -22,7 +22,6 @@ public class Vertex {
             int x_projected = camera.projectX(x, y, z);
             int y_projected = camera.projectY(x, y, z);
 
-            graphics2D.setColor(Color.BLACK);
             graphics2D.fillRect(x_projected + Constants.xOffset, Constants.yOffset - y_projected, 1, 1);
         }
     }

@@ -12,13 +12,13 @@ public class Converter {
     public static int[][][] convertToInt3(BufferedImage[] slices) {
         int[][][] result = new int[slices.length][slices[0].getHeight()][slices[0].getWidth()];
 
-        int blackRGB = 0xFF000000;
+        int lowerLimit = 0xFF646464;
 
         for (int z = 0; z < slices.length; z++) {
             BufferedImage slice = slices[z];
             for (int y = 0; y < slice.getHeight(); y++) {
                 for (int x = 0; x < slice.getWidth(); x++) {
-                    if (slice.getRGB(x, y) == blackRGB) {
+                    if (slice.getRGB(x, y) < lowerLimit) {
                         result[z][y][x] = 0;
                     } else {
                         result[z][y][x] = 1;
@@ -48,16 +48,59 @@ public class Converter {
     public static RectangularPrism[] convertToRectangularPrisms(int[][][] int3) {
         List<RectangularPrism> rectangularPrisms = new ArrayList<>();
 
-        int temp = 0;
+        int scale = 1;
+        int y_upscale = 3;
 
-        for(int z_index = 0; z_index < 30; z_index++) {
+        int temp = 0;
+        int firstX = -1;
+
+        for(int z_index = 0; z_index < int3.length; z_index++) {
             for(int y_index = 0; y_index < int3[0].length; y_index++) {
                 for(int x_index = 0; x_index < int3[0][0].length; x_index++) {
                     if(int3[z_index][y_index][x_index] == 1) {
+                        if(temp == 0) {
+                            firstX = x_index;
+                        }
                         temp++;
-                    } else if (temp>0){
-                        rectangularPrisms.add(new RectangularPrism(x_index*1, z_index*3, y_index*1, temp*1, 3, 1));
+                    } else if (temp > 0) {
+                        rectangularPrisms.add(new RectangularPrism(firstX*scale, z_index*scale*y_upscale, y_index*scale, scale*temp, scale*y_upscale, scale));
                         temp = 0;
+                    }
+                }
+            }
+        }
+
+        return rectangularPrisms.toArray(new RectangularPrism[0]);
+    }
+
+    public static RectangularPrism[] convertToRectangularPrisms_test(int[][][] int3) {
+        List<RectangularPrism> rectangularPrisms = new ArrayList<>();
+
+        int firstX = -1, lastX;
+
+        int scale = 1;
+        int y_upscale = 3;
+        for(int z_index = 0; z_index < 1; z_index++) {
+            for(int y_index = 0; y_index < int3[0].length; y_index++) {
+                for(int x_index = 0; x_index < int3[0][0].length; x_index++) {
+                    if(int3[z_index][y_index][x_index] == 1) {
+                        if(firstX == -1) {
+                            firstX = x_index;
+                        }
+                    } else if (firstX != -1) {
+                        lastX = x_index - 1;
+                        for(int row = y_index+1; row < int3[0].length; row++) {
+                            for(int col = firstX; col <= lastX; col++) {
+                                if(int3[z_index][row][col] != 1) {
+                                    rectangularPrisms.add(new RectangularPrism(firstX*scale, z_index*scale*y_upscale, y_index*scale, scale*(lastX-firstX+1), scale*y_upscale, scale*(row-y_index)));
+                                    firstX = -1;
+                                    break;
+                                }
+                            }
+                            if(firstX == -1) {
+                                break;
+                            }
+                        }
                     }
                 }
             }

@@ -6,6 +6,7 @@ import components.Vertex;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class RectangularPrism {
     public double x, y, z;
@@ -78,6 +79,7 @@ public class RectangularPrism {
     }
 
     public void renderEdges(Camera camera, Graphics2D graphics2D) {
+        graphics2D.setColor(Color.BLACK);
         for (Edge edge : edge_table) {
             edge.render(camera, graphics2D);
         }

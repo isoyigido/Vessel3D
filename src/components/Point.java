@@ -23,7 +23,6 @@ public class Point {
             int x_projected = camera.projectX(x, y, z_relative);
             int y_projected = camera.projectY(x, y, z_relative);
 
-            graphics2D.setColor(Color.BLACK);
             graphics2D.fillOval(x_projected + Constants.xOffset - radius, Constants.yOffset - y_projected - radius, radius, radius);
         }
     }

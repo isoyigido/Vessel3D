@@ -24,7 +24,6 @@ public class Edge {
             int y_projected1 = camera.projectY(vertex1.x, vertex1.y, vertex1.z);
             int y_projected2 = camera.projectY(vertex2.x, vertex2.y, vertex2.z);
 
-            graphics2D.setColor(Color.BLACK);
             graphics2D.drawLine(x_projected1 + Constants.xOffset, Constants.yOffset - y_projected1, x_projected2 + Constants.xOffset, Constants.yOffset - y_projected2);
         }
     }
