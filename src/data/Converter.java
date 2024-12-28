@@ -26,9 +26,25 @@ public class Converter {
                 }
             }
         }
+
+//      Debugging purposes
+        int x_max = slices[0].getWidth() - 1;
+        int y_max = slices[0].getHeight() - 1;
+        int z_max = slices.length - 1;
+        result[0][0][0] = 1;
+        result[0][0][x_max] = 1;
+        result[0][y_max][0] = 1;
+        result[0][y_max][x_max] = 1;
+        result[z_max][0][0] = 1;
+        result[z_max][0][x_max] = 1;
+        result[z_max][y_max][0] = 1;
+        result[z_max][y_max][x_max] = 1;
+//      --------------------------------
+
         return result;
     }
 
+    @Deprecated
     public static Point[] convertToPoints(int[][][] int3) {
         List<Point> points = new ArrayList<>();
 
@@ -58,12 +74,15 @@ public class Converter {
             for(int y_index = 0; y_index < int3[0].length; y_index++) {
                 for(int x_index = 0; x_index < int3[0][0].length; x_index++) {
                     if(int3[z_index][y_index][x_index] == 1) {
-                        if(temp == 0) {
+                        if(x_index == int3[0][0].length - 1) {
+                            rectangularPrisms.add(new RectangularPrism(x_index*scale, z_index*scale*y_upscale, (int3[0].length-y_index-1)*scale, scale, scale*y_upscale, scale));
+                            temp = 0;
+                        } else if (temp == 0) {
                             firstX = x_index;
                         }
                         temp++;
                     } else if (temp > 0) {
-                        rectangularPrisms.add(new RectangularPrism(firstX*scale, z_index*scale*y_upscale, y_index*scale, scale*temp, scale*y_upscale, scale));
+                        rectangularPrisms.add(new RectangularPrism(firstX*scale, z_index*scale*y_upscale, (int3[0].length-y_index-1)*scale, scale*temp, scale*y_upscale, scale));
                         temp = 0;
                     }
                 }
@@ -84,21 +103,40 @@ public class Converter {
             for(int y_index = 0; y_index < int3[0].length; y_index++) {
                 for(int x_index = 0; x_index < int3[0][0].length; x_index++) {
                     if(int3[z_index][y_index][x_index] == 1) {
-                        if(firstX == -1) {
+                        if(x_index == int3[0][0].length - 1) {
+                            if(y_index == int3[0].length - 1) {
+                                rectangularPrisms.add(new RectangularPrism(x_index*scale, z_index*scale*y_upscale, (int3[0].length-y_index-1)*scale, scale, scale*y_upscale, scale));
+                                firstX = -1;
+                            } else {
+                                for (int row = y_index + 1; row < int3[0].length; row++) {
+                                    if (int3[z_index][row][x_index] != 1) {
+                                        rectangularPrisms.add(new RectangularPrism(x_index * scale, z_index*scale*y_upscale, (int3[0].length - y_index - 1) * scale, scale, scale * y_upscale, scale * (row - y_index)));
+                                        firstX = -1;
+                                        break;
+                                    }
+                                }
+                            }
+                        } else if (firstX == -1) {
                             firstX = x_index;
                         }
                     } else if (firstX != -1) {
                         lastX = x_index - 1;
-                        for(int row = y_index+1; row < int3[0].length; row++) {
-                            for(int col = firstX; col <= lastX; col++) {
-                                if(int3[z_index][row][col] != 1) {
-                                    rectangularPrisms.add(new RectangularPrism(firstX*scale, z_index*scale*y_upscale, y_index*scale, scale*(lastX-firstX+1), scale*y_upscale, scale*(row-y_index)));
-                                    firstX = -1;
+                        if(y_index == int3[0].length - 1) {
+                            rectangularPrisms.add(new RectangularPrism(firstX*scale, z_index*scale*y_upscale, (int3[0].length-y_index-1)*scale, scale*(lastX-firstX+1), scale*y_upscale, scale));
+                            firstX = -1;
+                        } else {
+                            for (int row = y_index + 1; row < int3[0].length; row++) {
+                                for (int col = firstX; col <= lastX; col++) {
+                                    if (int3[z_index][row][col] != 1) {
+                                        System.out.println(firstX + " " + y_index + " | " + (lastX - firstX + 1) + " " + (row - y_index));
+                                        rectangularPrisms.add(new RectangularPrism(firstX * scale, z_index * scale * y_upscale, (int3[0].length - y_index - 1) * scale, scale * (lastX - firstX + 1), scale * y_upscale, scale * (row - y_index)));
+                                        firstX = -1;
+                                        break;
+                                    }
+                                }
+                                if (firstX == -1) {
                                     break;
                                 }
-                            }
-                            if(firstX == -1) {
-                                break;
                             }
                         }
                     }

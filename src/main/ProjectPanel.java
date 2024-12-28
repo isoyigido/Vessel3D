@@ -46,8 +46,8 @@ public class ProjectPanel extends JPanel {
         vessel3d = Converter.convertToRectangularPrisms(Converter.convertToInt3(slices));
 
         floor = new RectangularPrism(-200, -25, -200, 400, 25, 400);
-        rectangularPrism1 = new RectangularPrism(-25, 0, 100, 50, 100, 25);
-        rectangularPrism2 = new RectangularPrism(-25, 0, -100, 50, 100, 25);
+        rectangularPrism1 = new RectangularPrism(0, 0, 0, 512, 50, 512);
+        rectangularPrism2 = new RectangularPrism(0, 0, 0, 512*3, 50, 512*3);
     }
 
     private void setPanelSize() {
@@ -63,7 +63,7 @@ public class ProjectPanel extends JPanel {
         Graphics2D graphics2D = (Graphics2D) graphics;
 
 //        floor.renderEdges(camera, graphics2D);
-//        rectangularPrism1.renderEdges(camera, graphics2D);
+        rectangularPrism1.renderEdges(camera, graphics2D);
 //        rectangularPrism2.renderEdges(camera, graphics2D);
         for(RectangularPrism rectangularPrism : vessel3d) {
             rectangularPrism.renderEdges(camera, graphics2D);
