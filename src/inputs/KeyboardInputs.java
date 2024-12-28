@@ -74,6 +74,12 @@ public class KeyboardInputs implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_G) {
             projectPanel.camera.gui_enabled = !projectPanel.camera.gui_enabled;
         }
+        if (e.getKeyCode() == KeyEvent.VK_M) {
+            projectPanel.camera.toggleMouse();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            projectPanel.camera.disableMouse();
+        }
     }
 
     @Override

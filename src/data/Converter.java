@@ -50,13 +50,13 @@ public class Converter {
 
         int temp = 0;
 
-        for(int z_index = 0; z_index < 20; z_index++) {
+        for(int z_index = 0; z_index < 30; z_index++) {
             for(int y_index = 0; y_index < int3[0].length; y_index++) {
                 for(int x_index = 0; x_index < int3[0][0].length; x_index++) {
                     if(int3[z_index][y_index][x_index] == 1) {
                         temp++;
                     } else if (temp>0){
-                        rectangularPrisms.add(new RectangularPrism(x_index*1, y_index*1, z_index*1, temp*1, 1, 1));
+                        rectangularPrisms.add(new RectangularPrism(x_index*1, z_index*3, y_index*1, temp*1, 3, 1));
                         temp = 0;
                     }
                 }
