@@ -13,6 +13,11 @@ public class Edge {
         vertex2 = vertex2_input;
     }
 
+    public Edge(double x1, double y1, double z1, double x2, double y2, double z2) {
+        vertex1 = new Vertex(x1, y1, z1);
+        vertex2 = new Vertex(x2, y2, z2);
+    }
+
     public void render(Camera camera, Graphics2D graphics2D) {
         double z_relative1 = camera.zRelative(vertex1.x, vertex1.y, vertex1.z);
         double z_relative2 = camera.zRelative(vertex2.x, vertex2.y, vertex2.z);

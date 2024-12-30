@@ -1,6 +1,7 @@
 package main;
 
 import camera.Camera;
+import components.Text;
 import data.Converter;
 import data.Data;
 import gui.InfoGUI;
@@ -8,12 +9,14 @@ import inputs.KeyboardInputs;
 import inputs.MouseInputs;
 import components.Point;
 import objects.RectangularPrism;
+import objects.Vessel3D;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class ProjectPanel extends JPanel {
+    InfoGUI infoGUI;
 
     public KeyboardInputs keyboardInputs;
     public MouseInputs mouseInputs;
@@ -23,13 +26,20 @@ public class ProjectPanel extends JPanel {
     public static final String source_directory = "res/data";
     BufferedImage[] slices;
 
-    RectangularPrism[] vessel3d;
+    Vessel3D vessel3d;
     RectangularPrism floor;
     RectangularPrism rectangularPrism1;
     RectangularPrism rectangularPrism2;
 
+    Text[] texts;
+
+    public int FPS;
+    public int UPS;
+
     public ProjectPanel() {
         setPanelSize();
+
+        infoGUI = new InfoGUI(this);
 
         keyboardInputs = new KeyboardInputs(this);
         mouseInputs = new MouseInputs(this);
@@ -43,11 +53,14 @@ public class ProjectPanel extends JPanel {
         Data.indexDataIn(source_directory);
         slices = Data.loadPngSlices(source_directory);
         assert slices != null;
-        vessel3d = Converter.convertToRectangularPrisms(Converter.convertToInt3(slices));
+        vessel3d = new Vessel3D(0, 0, 0, Converter.convertToInt3(slices), 1, 3);
 
         floor = new RectangularPrism(-200, -25, -200, 400, 25, 400);
-        rectangularPrism1 = new RectangularPrism(0, 0, 0, 512, 50, 512);
+        rectangularPrism1 = new RectangularPrism(0, 0, 0, 512, 288, 512);
         rectangularPrism2 = new RectangularPrism(0, 0, 0, 512*3, 50, 512*3);
+
+        FPS = 0;
+        UPS = 0;
     }
 
     private void setPanelSize() {
@@ -63,12 +76,11 @@ public class ProjectPanel extends JPanel {
         Graphics2D graphics2D = (Graphics2D) graphics;
 
 //        floor.renderEdges(camera, graphics2D);
-        rectangularPrism1.renderEdges(camera, graphics2D);
+//        rectangularPrism1.renderEdges(camera, graphics2D);
 //        rectangularPrism2.renderEdges(camera, graphics2D);
-        for(RectangularPrism rectangularPrism : vessel3d) {
-            rectangularPrism.renderEdges(camera, graphics2D);
-        }
-        InfoGUI.render(camera, graphics2D);
+        vessel3d.render(camera, graphics2D);
+        infoGUI.render(camera, graphics2D);
+
     }
 
     public void updateProject() {

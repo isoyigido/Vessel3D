@@ -20,8 +20,8 @@ public class Point {
         double z_relative = camera.zRelative(x, y, z);
 
         if (z_relative > 0) {
-            int x_projected = camera.projectX(x, y, z_relative);
-            int y_projected = camera.projectY(x, y, z_relative);
+            int x_projected = camera.projectX(x, y, z);
+            int y_projected = camera.projectY(x, y, z);
 
             graphics2D.fillOval(x_projected + Constants.xOffset - radius, Constants.yOffset - y_projected - radius, radius, radius);
         }
