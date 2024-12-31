@@ -26,6 +26,9 @@ public class ProjectPanel extends JPanel {
     public static final String source_directory = "res/data";
     BufferedImage[] slices;
 
+    public static final String source_directory_extra = "res/data_extra";
+    BufferedImage[] slices_extra;
+
     Vessel3D vessel3d;
     RectangularPrism floor;
     RectangularPrism rectangularPrism1;
@@ -48,11 +51,15 @@ public class ProjectPanel extends JPanel {
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
 
-        camera = new Camera(this, 0, 0, 0, 0, 0, 0, (int) Camera.calculateFocalLength(90, Constants.screenWidth), 1, 0.1);
+        camera = new Camera(this, 200, 144, -150, 0, 0, 0, (int) Camera.calculateFocalLength(90, Constants.screenWidth), 1, 0.1);
 
         Data.indexDataIn(source_directory);
         slices = Data.loadPngSlices(source_directory);
         assert slices != null;
+        Data.indexDataIn(source_directory_extra);
+        slices_extra = Data.loadPngSlices(source_directory_extra);
+        assert slices_extra != null;
+
         vessel3d = new Vessel3D(0, 0, 0, Converter.convertToInt3(slices), 1, 3);
 
         floor = new RectangularPrism(-200, -25, -200, 400, 25, 400);
@@ -75,12 +82,14 @@ public class ProjectPanel extends JPanel {
 
         Graphics2D graphics2D = (Graphics2D) graphics;
 
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, Constants.screenWidth, Constants.screenHeight);
+
 //        floor.renderEdges(camera, graphics2D);
 //        rectangularPrism1.renderEdges(camera, graphics2D);
 //        rectangularPrism2.renderEdges(camera, graphics2D);
         vessel3d.render(camera, graphics2D);
         infoGUI.render(camera, graphics2D);
-
     }
 
     public void updateProject() {

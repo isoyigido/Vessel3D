@@ -18,15 +18,15 @@ public class Data {
                 return;
             }
 
-            File[] files = directory.listFiles((dir, name) -> name.matches("image\\.\\d+\\.png"));
+            File[] files = directory.listFiles((dir, name) -> name.matches("\\d+\\.png"));
 
             if (files == null || files.length == 0) {
                 return;
             }
 
             java.util.Arrays.sort(files, (f1, f2) -> {
-                int num1 = Integer.parseInt(f1.getName().replace("image.", "").replace(".png", ""));
-                int num2 = Integer.parseInt(f2.getName().replace("image.", "").replace(".png", ""));
+                int num1 = Integer.parseInt(f1.getName().replace(".png", ""));
+                int num2 = Integer.parseInt(f2.getName().replace(".png", ""));
                 return Integer.compare(num1, num2);
             });
 
