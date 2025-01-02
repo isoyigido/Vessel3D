@@ -7,9 +7,8 @@ import data.Data;
 import gui.InfoGUI;
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
-import components.Point;
+import objects.Liver;
 import objects.RectangularPrism;
-import objects.Vessel3D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,12 +28,11 @@ public class ProjectPanel extends JPanel {
     public static final String source_directory_extra = "res/data_extra";
     BufferedImage[] slices_extra;
 
-    Vessel3D vessel3d;
+    public Liver liver;
+
     RectangularPrism floor;
     RectangularPrism rectangularPrism1;
     RectangularPrism rectangularPrism2;
-
-    Text[] texts;
 
     public int FPS;
     public int UPS;
@@ -60,7 +58,7 @@ public class ProjectPanel extends JPanel {
         slices_extra = Data.loadPngSlices(source_directory_extra);
         assert slices_extra != null;
 
-        vessel3d = new Vessel3D(0, 0, 0, Converter.convertToInt3(slices), 1, 3);
+        liver = new Liver(0, 0, 0, Converter.convertToInt3(slices), slices_extra, 1, 3);
 
         floor = new RectangularPrism(-200, -25, -200, 400, 25, 400);
         rectangularPrism1 = new RectangularPrism(0, 0, 0, 512, 288, 512);
@@ -88,7 +86,7 @@ public class ProjectPanel extends JPanel {
 //        floor.renderEdges(camera, graphics2D);
 //        rectangularPrism1.renderEdges(camera, graphics2D);
 //        rectangularPrism2.renderEdges(camera, graphics2D);
-        vessel3d.render(camera, graphics2D);
+        liver.render(camera, graphics2D);
         infoGUI.render(camera, graphics2D);
     }
 

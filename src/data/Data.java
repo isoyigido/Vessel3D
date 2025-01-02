@@ -32,7 +32,7 @@ public class Data {
 
             boolean alreadyRenamed = true;
             for (int i = 0; i < files.length; i++) {
-                String expectedFileName = (i + 1) + ".png";
+                String expectedFileName = (i) + ".png";
                 if (!files[i].getName().equals(expectedFileName)) {
                     alreadyRenamed = false;
                     break;

@@ -80,6 +80,30 @@ public class KeyboardInputs implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             projectPanel.camera.disableMouse();
         }
+        if(e.getKeyCode() == KeyEvent.VK_1) {
+            projectPanel.liver.liver_enabled = true;
+            projectPanel.liver.vessel_enabled = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_2) {
+            projectPanel.liver.liver_enabled = false;
+            projectPanel.liver.vessel_enabled = true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_3) {
+            projectPanel.liver.liver_enabled = true;
+            projectPanel.liver.vessel_enabled = true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
+            projectPanel.liver.liver_enabled = true;
+            projectPanel.liver.vessel_enabled = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_NUMPAD2) {
+            projectPanel.liver.liver_enabled = false;
+            projectPanel.liver.vessel_enabled = true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_NUMPAD3) {
+            projectPanel.liver.liver_enabled = true;
+            projectPanel.liver.vessel_enabled = true;
+        }
     }
 
     @Override
